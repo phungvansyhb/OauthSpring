@@ -1,0 +1,22 @@
+INSERT INTO user_table (username, password, email)
+VALUES
+    ('user1', 'pass1', 'user1@example.com'),
+    ('user2', 'pass2', 'user2@example.com'),
+    ('user3', 'pass3', 'user3@example.com'),
+    ('user4', 'pass4', 'user4@example.com'),
+    ('user5', 'pass5', 'user5@example.com'),
+    ('user6', 'pass6', 'user6@example.com'),
+    ('user7', 'pass7', 'user7@example.com'),
+    ('user8', 'pass8', 'user8@example.com'),
+    ('user9', 'pass9', 'user9@example.com'),
+    ('user10', 'pass10', 'user10@example.com'),
+    ('user11', 'pass11', 'user11@example.com'),
+    ('user12', 'pass12', 'user12@example.com'),
+    ('user13', 'pass13', 'user13@example.com'),
+    ('user14', 'pass14', 'user14@example.com'),
+    ('user15', 'pass15', 'user15@example.com'),
+    ('user16', 'pass16', 'user16@example.com'),
+    ('user17', 'pass17', 'user17@example.com'),
+    ('user18', 'pass18', 'user18@example.com'),
+    ('user19', 'pass19', 'user19@example.com'),
+    ('user20', 'pass20', 'user20@example.com');

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+    <form th:action="@{/login}" th:object="${user}" method="post">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" th:field="*{username}" required />
+
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" th:field="*{password}" required />
+        </div>
+        <div>
+            <input type="checkbox" id="remember" name="rememberMe" th:field="*{remember}" value="null"/>
+            <label for="remember">Remember Me</label>
+        </div>
+        <div>
+            <label for="lang">Language:</label>
+            <select id="lang" name="lang" th:field="*{lang}">
+                <option value="en">English</option>
+                <option value="vi">Vietnamese</option>
+                <option value="fr">French</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
+        <div>
+            <p th:if="${error}" style="color: red;">Invalid username or password.</p>
+        </div>
+        <div>
+            <p>Or login with:</p>
+            <a th:href="@{/oauth2/authorization/google}">Google</a> |
+            <a th:href="@{/oauth2/authorization/facebook}">Facebook</a> |
+            <a th:href="@{/oauth2/authorization/github}">GitHub</a>
+        </div>
+    </form>
+</body>
+</html>
