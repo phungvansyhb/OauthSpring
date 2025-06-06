@@ -14,12 +14,24 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("org.springframework.boot:spring-boot-starter-web:3.5.0")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf:3.5.0")
+    implementation("org.springframework.boot:spring-boot-devtools:3.5.0")
+
+    /*security OAuth2*/
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.5.0")
     implementation("org.springframework.boot:spring-boot-starter-security:3.5.0")
-    implementation("org.springframework.boot:spring-boot-devtools:3.5.0")
+
+    /*Loombok*/
     implementation("org.projectlombok:lombok:1.18.38")
+    compileOnly("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
+
+    /*JPA postgresql*/
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.5.0")
     implementation("org.postgresql:postgresql:42.7.5")
+
+    /*FLyway*/
+    implementation("org.flywaydb:flyway-core:11.9.0")
+    implementation("org.flywaydb:flyway-database-postgresql:11.9.0")
 }
 tasks.test {
     useJUnitPlatform()

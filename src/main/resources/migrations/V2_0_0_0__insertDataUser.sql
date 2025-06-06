@@ -1,4 +1,4 @@
-INSERT INTO user_table (username, password, email)
+INSERT INTO app_user (username, password, email)
 VALUES
     ('user1', 'pass1', 'user1@example.com'),
     ('user2', 'pass2', 'user2@example.com'),

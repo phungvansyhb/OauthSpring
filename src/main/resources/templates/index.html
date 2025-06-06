@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <form th:action="@{/login}" th:object="${user}" method="post">
+    <form th:action="@{/login}" th:object="${loginedUserDTO}" method="post">
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" th:field="*{username}" required />

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1 >Welcome, <span th:if="${user}" th:text="${user.username}"></span>!</h1>
+    <h1 >Welcome, <span th:if="${loginedUserDTO}" th:text="${loginedUserDTO.username}"></span>!</h1>
     <h2 th:if="${email}" th:text="${email}"></h2>
     <p>You have successfully logged in.</p>
     <button id="logoutBtn"><a th:href="@{/logout}">Logout</a></button>
