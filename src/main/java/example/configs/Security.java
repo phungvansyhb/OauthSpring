@@ -29,7 +29,7 @@ public class Security {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/success", true)
                         .failureUrl("/login?error")

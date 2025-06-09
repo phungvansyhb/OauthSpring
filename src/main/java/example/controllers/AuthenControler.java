@@ -1,22 +1,18 @@
 package example.controllers;
 
-import example.models.User;
 import example.models.req.LoginedUserDTO;
 import example.models.req.RegisterUserDTO;
 import example.models.req.UserSSODTO;
 import example.models.res.CreatedUserDTO;
 import example.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.Objects;
-
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Controller
 public class AuthenControler {
@@ -27,19 +23,12 @@ public class AuthenControler {
         this.userService = userService;
     }
 
-    LoginedUserDTO loginedUserDTOSystem = new LoginedUserDTO("admin", "admin", "true", "en");
-
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("loginedUserDTO", new LoginedUserDTO());
         return "index";
     }
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("loginedUserDTO", new LoginedUserDTO());
-        return "index";
-    }
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -56,21 +45,6 @@ public class AuthenControler {
         return "redirect:/";
     }
 
-//    @PostMapping("/login")
-//    public String handleSubmit(@ModelAttribute("user") LoginedUserDTO loginedUserDTO, Model model) {
-//
-//        if (Objects.equals(loginedUserDTO.getUsername(), loginedUserDTOSystem.getUsername()) &&
-//                loginedUserDTO.getPassword().equals(loginedUserDTOSystem.getPassword())) {
-//            model.addAttribute("user", loginedUserDTO);
-//            return "welcome";
-//        } else {
-//            model.addAttribute("error", "Invalid username or password");
-//            return "index";
-//
-//        }
-//
-//    }
-
     @GetMapping("/success")
     public String loginSuccess(Model model, @AuthenticationPrincipal OAuth2User principal) {
         model.addAttribute("name", principal.getAttribute("name"));
@@ -85,5 +59,13 @@ public class AuthenControler {
                 .build());
         return "welcome";
     }
+
+    @GetMapping("/admin/users")
+    public String getAllUsers(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "users";
+    }
+
+
 
 }

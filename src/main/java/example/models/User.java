@@ -1,5 +1,6 @@
 package example.models;
 
+import example.utils.Role;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,5 +30,6 @@ public class User {
     String email;
     String provider;
     String providerId;
+    String role;
     LocalDateTime createdAt;
 }

@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class UserServiceIml implements UserService {
@@ -89,6 +90,11 @@ public class UserServiceIml implements UserService {
         } else {
             System.out.println("User with this provider and provider ID already exists.");
         }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
 

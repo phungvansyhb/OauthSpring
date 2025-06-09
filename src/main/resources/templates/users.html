@@ -1,0 +1,19 @@
+<!-- src/main/resources/templates/users.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Cards</title>
+    <style>
+        .card { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin: 8px; width: 200px; display: inline-block; }
+    </style>
+</head>
+<body>
+<h1>User List</h1>
+<div>
+    <div th:each="user : ${users}" class="card">
+        <h2 th:text="${user.username}">User Name</h2>
+        <p>Email: <span th:text="${user.email}">user@example.com</span></p>
+    </div>
+</div>
+</body>
+</html>
