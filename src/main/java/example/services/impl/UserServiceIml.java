@@ -1,13 +1,16 @@
 package example.services.impl;
 
+import example.models.Role;
 import example.models.req.LoginedUserDTO;
 import example.models.User;
 import example.models.req.RegisterUserDTO;
 import example.models.req.UserSSODTO;
 import example.models.res.CreatedUserDTO;
+import example.repositories.RoleRepository;
 import example.repositories.UserRepository;
 import example.services.UserService;
 import example.utils.CryptographyUtil;
+import example.utils.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,9 +25,12 @@ public class UserServiceIml implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceIml(@Autowired UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private final RoleRepository roleRepository;
+
+    public UserServiceIml(@Autowired UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -43,10 +49,14 @@ public class UserServiceIml implements UserService {
         if (isUserExists) {
             throw new IllegalArgumentException("User with this username or email already exists");
         }
+
+        Role defaultRole = roleRepository.getReferenceById(RoleEnum.USER.getRoleId());
+
         User user = User.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .email(email)
+                .role(defaultRole)
                 .createdAt(LocalDateTime.now())
                 .build();
 

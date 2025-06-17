@@ -1,0 +1,9 @@
+ALTER TABLE app_user
+    ADD role_id INTEGER;
+
+ALTER TABLE app_user
+    ADD CONSTRAINT FK_APP_USER_ON_ROLE FOREIGN KEY (role_id) REFERENCES role (id);
+
+ALTER TABLE app_user
+DROP
+COLUMN role;

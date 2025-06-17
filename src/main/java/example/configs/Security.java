@@ -25,7 +25,6 @@ public class Security {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login**", "/register", "/style.css").permitAll()
-                        .requestMatchers("/admin**" , "admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

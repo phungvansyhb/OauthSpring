@@ -31,6 +31,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 ### 🎯 Cần nắm:
 
+* phiên bản đề cập là spring security 6 (bản 5 trở xuống có chút khác biệt)
 * `HttpSecurity`
 * `SecurityFilterChain` thay cho `WebSecurityConfigurerAdapter` (Spring Security 6+)
 * `@EnableMethodSecurity` (trước là `@EnableGlobalMethodSecurity`)

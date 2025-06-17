@@ -1,12 +1,7 @@
 package example.models;
 
-import example.utils.Role;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +19,21 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+
     String username;
+
     @Nullable
     String password;
+
     String email;
+
     String provider;
+
     String providerId;
-    String role;
+
+    @ManyToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    Role role;
+
     LocalDateTime createdAt;
 }

@@ -6,6 +6,7 @@ import example.models.req.UserSSODTO;
 import example.models.res.CreatedUserDTO;
 import example.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,11 @@ public class AuthenControler {
         return "index";
     }
 
+    @GetMapping("/admin")
+    @PreAuthorize("hasPermission('delete')")
+    public String admin(Model model) {
+        return "admin";
+    }
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -65,6 +71,7 @@ public class AuthenControler {
         model.addAttribute("users", userService.getAllUsers());
         return "users";
     }
+
 
 
 
