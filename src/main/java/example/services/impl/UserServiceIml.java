@@ -1,17 +1,22 @@
 package example.services.impl;
 
+import example.exceptions.ResouceNotFoundException;
 import example.models.Role;
 import example.models.req.LoginedUserDTO;
 import example.models.User;
 import example.models.req.RegisterUserDTO;
 import example.models.req.UserSSODTO;
 import example.models.res.CreatedUserDTO;
+import example.models.res.LoginSuccessUser;
 import example.repositories.RoleRepository;
 import example.repositories.UserRepository;
 import example.services.UserService;
 import example.utils.CryptographyUtil;
 import example.utils.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +32,13 @@ public class UserServiceIml implements UserService {
 
     private final RoleRepository roleRepository;
 
-    public UserServiceIml(@Autowired UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    private final AuthenticationManager authenticationManager;
+
+    public UserServiceIml(@Autowired UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.authenticationManager = authenticationManager;
     }
 
 
@@ -71,9 +79,13 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public boolean loginUser(LoginedUserDTO loginedUserDTO) {
-        // Implementation for logging in a user
-        return true; // Assuming login is successful for demonstration
+    public LoginSuccessUser loginUser(LoginedUserDTO loginedUserDTO) throws ResouceNotFoundException {
+        authenticationManager.authenticate(
+                new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                        loginedUserDTO.getUsername(), loginedUserDTO.getPassword()));
+        User authUser = userRepository.findUserByUsername(loginedUserDTO.getUsername())
+                .orElseThrow(() -> new ResouceNotFoundException("User not found with username: " + loginedUserDTO.getUsername()));
+        return new LoginSuccessUser(authUser.getUsername(), authUser.getEmail());
     }
 
     @Override
@@ -88,7 +100,7 @@ public class UserServiceIml implements UserService {
         String providerId = userSSODTO.getProviderId();
         String provider = userSSODTO.getProvider();
         boolean isUserExists = userRepository.existsByProviderAndProviderId(provider, providerId);
-        if(!isUserExists){
+        if (!isUserExists) {
             User user = User.builder()
                     .username(userSSODTO.getUsername())
                     .email(userSSODTO.getEmail())

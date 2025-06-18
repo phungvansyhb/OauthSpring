@@ -22,11 +22,9 @@ import java.util.stream.Collectors;
 public class CustomUserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
-    public CustomUserDetailService(UserRepository userRepository, RoleRepository roleRepository) {
+    public CustomUserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -36,16 +34,9 @@ public class CustomUserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         List<GrantedAuthority> authorities = new ArrayList<>(user.getRole().getPermissions().stream().map(per -> new SimpleGrantedAuthority(per.getName())).toList());
-
         return new CustomUserDetail(user, authorities);
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Integer roleId) {
-        Role role = roleRepository.findById(roleId).orElseThrow(() -> new NoSuchElementException("Role not found"));
-        return role.getPermissions().stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-                .collect(Collectors.toList());
-    }
 }
 
 

@@ -84,9 +84,31 @@ public void editPost(Post post) {
 
 ### **2.5. Tạo PermissionEvaluator tùy chỉnh**
 
-Nếu bạn cần kiểm tra phân quyền theo logic phức tạp hơn (ví dụ: user có thể xem resource nếu có subscription active), bạn có thể:
-
+Nếu bạn cần kiểm tra phân quyền theo logic phức tạp hơn (ví dụ: user có thể xem resource nếu có permission read), bạn có thể:
+ 
 * Cài đặt `PermissionEvaluator`
+```java
+@Component
+public class CustomPermissionEvaluator implements PermissionEvaluator {
+    @Override
+    public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
+        if (authentication == null || permission == null) {
+            return false;
+        }
+
+        String permissionString = permission.toString();
+
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(authority -> authority.equals(permissionString));
+    }
+
+    @Override
+    public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
+        return hasPermission(authentication, null, permission);
+    }
+}
+```
 * Sử dụng `@PreAuthorize("hasPermission('READ')")`
 
 ---
@@ -141,14 +163,14 @@ public String updateProfile(String username, String newData) {
 
 ## 💡 Tổng kết
 
-| Cách                                               | Khi nào dùng?                    |
-|----------------------------------------------------|----------------------------------|
-| `.authorizeHttpRequests()`                         | Phân quyền theo URL              |
-| `@PreAuthorize / @Secured`                         | Phân quyền theo logic controller |
-| SpEL nâng cao                                      | Phân quyền theo logic dữ liệu    |
-| Custom `PermissionEvaluator`                       | Phân quyền phức tạp              |
-| hasRole("ADMIN") (tương đương ROLE_ADMIN trong db) | kiểm tra quyền user              |
-| hasAuthority("READ")                               | kiểm tra chi tiết permision      |
+| Cách                                               | Khi nào dùng?                               |
+|----------------------------------------------------|---------------------------------------------|
+| `.authorizeHttpRequests()`                         | Phân quyền theo URL                         |
+| `@PreAuthorize / @Secured`                         | Phân quyền theo logic controller            |
+| SpEL nâng cao                                      | Phân quyền theo logic dữ liệu               |
+| Custom `PermissionEvaluator`                       | Phân quyền phức tạp group , permission, ... |
+| hasRole("ADMIN") (tương đương ROLE_ADMIN trong db) | kiểm tra quyền user                         |
+| hasAuthority("READ")                               | kiểm tra chi tiết permision                 |
 
 ---
 

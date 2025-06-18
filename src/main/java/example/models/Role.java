@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -29,8 +28,8 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     @JsonManagedReference
-    Set<Permission> permissions;
+    List<Permission> permissions;
 
     @OneToMany(mappedBy = "role")
-    Set<User> users;
+    List<User> users;
 }

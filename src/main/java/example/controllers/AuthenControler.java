@@ -31,7 +31,7 @@ public class AuthenControler {
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasPermission('delete')")
+    @PreAuthorize("hasPermission('','delete')")
     public String admin(Model model) {
         return "admin";
     }
