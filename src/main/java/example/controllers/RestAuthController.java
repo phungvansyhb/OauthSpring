@@ -21,6 +21,7 @@ public class RestAuthController {
 
     @PostMapping("/login")
     public LoginSuccessUser login(@RequestBody LoginedUserDTO loginedUserDTO) throws ResouceNotFoundException {
+
           return userService.loginUser(loginedUserDTO);
     }
 }

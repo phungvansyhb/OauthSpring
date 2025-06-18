@@ -12,9 +12,11 @@ import example.repositories.RoleRepository;
 import example.repositories.UserRepository;
 import example.services.UserService;
 import example.utils.CryptographyUtil;
+import example.utils.JWTUtil;
 import example.utils.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,11 +36,14 @@ public class UserServiceIml implements UserService {
 
     private final AuthenticationManager authenticationManager;
 
-    public UserServiceIml(@Autowired UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, AuthenticationManager authenticationManager) {
+    private final JWTUtil jwtUtil;
+
+    public UserServiceIml(@Autowired UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
 
@@ -80,12 +85,15 @@ public class UserServiceIml implements UserService {
 
     @Override
     public LoginSuccessUser loginUser(LoginedUserDTO loginedUserDTO) throws ResouceNotFoundException {
-        authenticationManager.authenticate(
+        var authentication = authenticationManager.authenticate(
                 new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
                         loginedUserDTO.getUsername(), loginedUserDTO.getPassword()));
         User authUser = userRepository.findUserByUsername(loginedUserDTO.getUsername())
                 .orElseThrow(() -> new ResouceNotFoundException("User not found with username: " + loginedUserDTO.getUsername()));
-        return new LoginSuccessUser(authUser.getUsername(), authUser.getEmail());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);  // then get by Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String jwt = jwtUtil.generateToken(authUser); // Generate JWT token for the authenticated user
+        return new LoginSuccessUser(authUser.getUsername(), authUser.getEmail() , jwt);
     }
 
     @Override

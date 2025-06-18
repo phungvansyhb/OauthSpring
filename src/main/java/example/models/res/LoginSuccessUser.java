@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class LoginSuccessUser {
     String userName;
     String email;
+    String token;
 }

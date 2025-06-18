@@ -31,7 +31,7 @@ public class User {
 
     String providerId;
 
-    @ManyToOne( fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "role_id")
     Role role;
 

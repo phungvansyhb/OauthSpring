@@ -4,6 +4,8 @@ import example.models.User;
 import example.security.CustomPermissionEvaluator;
 import example.security.CustomUserDetail;
 import example.security.CustomUserDetailService;
+import example.security.JwtAuthenFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -14,35 +16,46 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class Security {
 
+
+    private final JwtAuthenFilter jwtAuthenticationFilter;
+
+    public Security(JwtAuthenFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/login", "/register")
-                )
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login**", "/register", "/style.css").permitAll()
                         .anyRequest().authenticated()
+                ).sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 /* uncomment if use spring MVC */
-                .formLogin(form -> form
-                        .loginPage("/")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/success", true)
-                        .failureUrl("/login?error")
-                        .permitAll()
-                )
+//                .formLogin(form -> form
+//                        .loginPage("/")
+//                        .loginProcessingUrl("/login")
+//                        .defaultSuccessUrl("/success", true)
+//                        .failureUrl("/login?error")
+//                        .permitAll()
+//                )
                 .oauth2Login(oauth2 -> oauth2
                                 .defaultSuccessUrl("/success", true)
                         .failureHandler((request, response, exception) -> {
