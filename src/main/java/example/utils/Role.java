@@ -1,16 +1,8 @@
 package example.utils;
 
 public enum Role {
-    ADMIN("ROLE_ADMIN"),
-    USER("ROLE_USER"),
-    GUEST("ROLE_GUEST");
-    private final String roleName;
+    ROLE_ADMIN,
+    ROLE_USER,
+    ROLE_GUEST
 
-    Role(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
 }

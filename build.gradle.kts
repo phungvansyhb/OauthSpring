@@ -32,6 +32,9 @@ dependencies {
     /*FLyway*/
     implementation("org.flywaydb:flyway-core:11.9.0")
     implementation("org.flywaydb:flyway-database-postgresql:11.9.0")
+
+    /*Jedis*/
+    implementation("redis.clients:jedis:6.0.0")
 }
 tasks.test {
     useJUnitPlatform()

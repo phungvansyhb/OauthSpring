@@ -50,7 +50,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 ---
 
-## 🧾 4. **Phân quyền (Authorization)**
+## 🧾 4. **Phân quyền ([Authorization](authorize.md))**
 
 * Dựa trên URL (`hasRole`, `hasAuthority`)
 * Dựa trên phương thức (`@PreAuthorize`, `@PostAuthorize`)
