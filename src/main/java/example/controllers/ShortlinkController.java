@@ -1,26 +1,40 @@
 package example.controllers;
 
+import example.services.ShortLinkService;
+import example.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
-@Controller
+@RestController
+@RequestMapping("/api/shortlinks")
 public class ShortlinkController {
-    public String createShortLink(@RequestParam String originalUrl) {
-        return "shortLink";
+
+    private final ShortLinkService shortLinkService;
+    private final UserService userService;
+
+    public ShortlinkController(ShortLinkService shortLinkService, UserService userService) {
+        this.shortLinkService = shortLinkService;
+        this.userService = userService;
     }
 
-    public void increaseView(String shortLink) {
-
-    }
-    public ResponseEntity getDetails(String shortLink) {
-        return new ResponseEntity(  Map.of(
-            "originalUrl", "https://example.com",
-            "shortLink", shortLink,
-            "views", 100
-        ), null, 200);
+    @GetMapping()
+    public String createShortLink(@RequestParam(name = "originUrl") String originalUrl) {
+        return shortLinkService.generateShortLink(originalUrl);
     }
 
+    @GetMapping("/view")
+    public void increaseView(@RequestParam(name = "shortlink") String shortLink) {
+        shortLinkService.increaseViewCount(shortLink);
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity getDetails(@RequestParam(name = "shortlink") String shortLink) {
+        return shortLinkService.getUrlInfo(shortLink);
+    }
+
+    @GetMapping("/users-view/{id}")
+    public void increaseViewCount(@PathVariable(name = "id") Long id) {
+        userService.increaseView(id);
+    }
 }

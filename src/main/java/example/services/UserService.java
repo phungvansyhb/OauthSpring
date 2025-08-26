@@ -21,4 +21,6 @@ public interface UserService {
     public void saveUserSSO(UserSSODTO userSSODTO);
 
     public List<User> getAllUsers();
+
+    public void increaseView(Long userId);
 }

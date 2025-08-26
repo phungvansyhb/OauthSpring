@@ -96,5 +96,15 @@ public class UserServiceIml implements UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    @Override
+    public void increaseView(Long userId) {
+        var user = userRepository.findById(userId).orElse(null);
+        if(user != null){
+            if(user.getViews() == null) user.setViews(0);
+            user.setViews(user.getViews() + 1);
+            userRepository.save(user);
+        }
+    }
 }
 

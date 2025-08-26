@@ -29,4 +29,5 @@ public class User {
     @Enumerated(EnumType.STRING)
     Role role;
     LocalDateTime createdAt;
+    Integer views;
 }

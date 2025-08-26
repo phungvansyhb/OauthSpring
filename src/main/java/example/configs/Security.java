@@ -24,8 +24,8 @@ public class Security {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/login**", "/register", "/style.css").permitAll()
-                        .requestMatchers("/admin**" , "admin/**").hasRole("ADMIN")
+                        .requestMatchers("/", "/login**", "/register", "/style.css", "/api/shortlinks**", "/api/shortlinks/**", "/api/users/view/**").permitAll()
+                        .requestMatchers("/admin**", "admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -36,7 +36,7 @@ public class Security {
                         .permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                                .defaultSuccessUrl("/success", true)
+                        .defaultSuccessUrl("/success", true)
                         .failureHandler((request, response, exception) -> {
                             exception.printStackTrace(); // In lỗi ra console
                             response.sendRedirect("/login?error");
